@@ -4,8 +4,12 @@ import { createMemoryHistory, createBrowserHistory } from "history";
 import App from "./App";
 
 // mount function to start the app
-export const mount = (el, { onNavigate, defaultHistory }) => {
-  const history = defaultHistory ?? createMemoryHistory();
+export const mount = (el, { onNavigate, defaultHistory, initialPath }) => {
+  const history =
+    defaultHistory ??
+    createMemoryHistory({
+      initialEntries: [initialPath],
+    });
   if (onNavigate) {
     history.listen(onNavigate);
   }
@@ -24,7 +28,7 @@ export const mount = (el, { onNavigate, defaultHistory }) => {
 if (process.env.NODE_ENV == "development") {
   const el = document.querySelector("#_marketing-dev-root");
   if (el) {
-    mount(el, {defaultHistory: createBrowserHistory()});
+    mount(el, { defaultHistory: createBrowserHistory() });
   }
 }
 // if running through container, export the mount function and it will be called from container instead.
