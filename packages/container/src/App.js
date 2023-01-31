@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { StylesProvider, createGenerateClassName } from "@material-ui/core";
-import MarketingApp from "./components/MarketingApp";
-import AuthApp from "./components/AuthApp";
+const AuthApp = React.lazy(() => import("./components/AuthApp"));
+const MarketingApp = React.lazy(() => import("./components/MarketingApp"));
 import Header from "./components/Header";
 
 const generateClassName = createGenerateClassName({
@@ -14,10 +14,12 @@ export default () => {
       <StylesProvider generateClassName={generateClassName}>
         <div>
           <Header />
-          <Switch>
-            <Route path="/auth" component={AuthApp} />
-            <Route path="/" component={MarketingApp} />
-          </Switch>
+          <React.Suspense fallback={<div>loading..</div>}>
+            <Switch>
+              <Route path="/auth" component={AuthApp} />
+              <Route path="/" component={MarketingApp} />
+            </Switch>
+          </React.Suspense>
         </div>
       </StylesProvider>
     </BrowserRouter>
